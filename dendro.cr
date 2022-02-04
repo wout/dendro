@@ -5,21 +5,21 @@
 # Or paste into the playground: https://play.crystal-lang.org/
 # This code is written for Crystal 1.3 and has no dependendies.
 
-require "json"
-require "xml"
+require %(json)
+require %(xml)
 
 struct Dendro
   CORE_ANGLES    = (8..18)      # min/max number growth angles
   CORE_DIST      = 7.0          # min distance between cores
   CORE_LIFETIME  = (15..25)     # min/max lifetime of a core
   CORE_R_INIT    = 2.0          # initial core radius
-  CORE_R_MAX     = {5.0, 8.0}   # variable max core radius
+  CORE_R_MAX     = (5..8)       # variable max core radius
   CORE_RATE      = {0.8, 1.5}   # min/max growth rate
   CORE_TRIES     = 500          # max tries to find new position
-  FILL           = "#111111"    # background colour
-  LAYER_DIST     =  0.3         # distance between layers
+  FILL           = %(#111111)   # background colour
+  LAYER_DIST     =  0.4         # distance between layers
   LAYER_FLOW     =  400         # the max number of layers
-  LAYER_FALLOFF  =   60         # number of layer for spacing
+  LAYER_FALLOFF  =   60         # number of layers for spacing
   LAYER_MAX      =  0.5         # max usable layer distance
   LAYER_REDUCE   =   20         # flow reduction step per core
   LAYER_SMOOTH   = 0.15         # smoothing of bezier curve
@@ -30,17 +30,17 @@ struct Dendro
   SIZE_DOC       = 4096         # document size for export
   SIZE_VB        =  100         # viewbox size
   STROKE_OPACITY = {0.85, 0.95} # min/max stroke opacity
-  STROKE_WIDTH   = {0.10, 0.17} # min/max stroke width
+  STROKE_WIDTH   = {0.12, 0.18} # min/max stroke width
 
   SECTOR_RES = 360 / SECTOR_NUM
 
   COLORS = {
-    "#BAF4DE", # 0: verdigris
-    "#FFFFFA", # 1: porcelain
-    "#CAEFF7", # 2: frost
-    "#DFEDAE", # 3: phosphor
-    "#DEDAF1", # 4: lilac
-    "#E5B7A5", # 5: copper
+    %(#BAF4DE), # 0: verdigris
+    %(#FFFFFA), # 1: porcelain
+    %(#CAEFF7), # 2: frost
+    %(#DFEDAE), # 3: phosphor
+    %(#DEDAF1), # 4: lilac
+    %(#E5B7A5), # 5: copper
   }
 
   alias Point = Tuple(Float64, Float64)
@@ -88,8 +88,7 @@ struct Dendro
   end
 
   private def add_new_core : Void
-    min, max = CORE_R_MAX
-    max_r = (min + prng.rand(max - min)).round(2)
+    max_r = prng.rand(CORE_R_MAX).to_f
     if cp = Core.position(max_r, current_cores, prng)
       l = prng.rand(CORE_LIFETIME)
       core = Core.new(cp: cp, max_r: max_r, life: l, age: 1)
@@ -101,8 +100,10 @@ struct Dendro
     include JSON::Serializable
 
     getter age : Int32
-    getter cp : Tuple(Float64, Float64)
+    @[JSON::Field(converter: Dendro::PointFromArray)]
+    getter cp : Point
     getter life : Int32
+    @[JSON::Field(converter: Dendro::FloatFromInt)]
     getter max_r : Float64
 
     @[JSON::Field(ignore: true)]
@@ -295,22 +296,22 @@ struct Dendro
     def from_points(ps)
       ps.map_with_index do |p, i|
         i == 0 ? start(p) : bezier(p, i, ps)
-      end.join(" ") + stop
+      end.join(' ') + stop
     end
 
     def start(p) : String
-      "M #{p[0]},#{p[1]}"
+      %(M #{p[0]},#{p[1]})
     end
 
     def stop : String
-      "z"
+      %(z)
     end
 
     def bezier(p, i, a) : String
       s = a[i - 1]
       cs_x, cs_y = control_point(s, a[i - 2], p, false)
       ce_x, ce_y = control_point(p, s, a[(i + 1) % a.size])
-      "C #{cs_x},#{cs_y} #{ce_x},#{ce_y} #{p[0]},#{p[1]}"
+      %(C #{cs_x},#{cs_y} #{ce_x},#{ce_y} #{p[0]},#{p[1]})
     end
 
     def control_point(c, p, n, r = true) : Point
@@ -380,21 +381,21 @@ struct Dendro
     extend self
 
     def build(color, cores, prng, layer_flow)
-      XML.build_fragment(indent: "  ") do |svg|
+      XML.build_fragment(indent: %(  )) do |svg|
         Layer.build(cores, prng, layer_flow)
         d, v, h = SIZE_DOC, SIZE_VB, SIZE_VB / 2
 
-        svg.element("svg",
-          xmlns: "http://www.w3.org/2000/svg", version: "1.1",
-          width: d, height: d, viewBox: "0 0 #{v} #{v}",
-          stroke: COLORS[color]) do
-          svg.element("defs") do
-            svg.element("clipPath", id: "clip") do
-              svg.element("circle", r: h, cx: h, cy: h)
+        svg.element(%(svg),
+          xmlns: %(http://www.w3.org/2000/svg),
+          version: %(1.1), stroke: COLORS[color], fill: FILL,
+          width: d, height: d, viewBox: %(0 0 #{v} #{v})) do
+          svg.element(%(defs)) do
+            svg.element(%(clipPath), id: %(clip)) do
+              svg.element(%(circle), r: h, cx: h, cy: h)
             end
           end
-          svg.element("g", "clip-path": "url(#clip)") do
-            svg.element("rect", width: v, height: v, fill: FILL)
+          svg.element(%(g), %(clip-path): %(url(#clip))) do
+            svg.element(%(rect), width: v, height: v)
             cores.each do |core|
               o = 1 / core.layers.size
               core.layers.reverse.each.with_index do |points, i|
@@ -403,10 +404,10 @@ struct Dendro
                 sw = (swmin + prng.rand(swmax - swmin)).round(2)
                 so = (somin + prng.rand(somax = somin)).round(2)
                 fo = Math.max(0.5 - i * o, 0)
-                svg.element("path",
+                svg.element(%(path),
                   d: Path.from_points(points),
-                  fill: FILL, "fill-opacity": fo,
-                  "stroke-width": sw, "stroke-opacity": so)
+                  %(fill-opacity): fo,
+                  %(stroke-width): sw, %(stroke-opacity): so)
               end
             end
           end
@@ -414,25 +415,51 @@ struct Dendro
       end
     end
   end
+
+  struct FloatFromInt
+    def self.from_json(pull : JSON::PullParser)
+      pull.read_int.to_f
+    end
+
+    def self.to_json(value : Float64, json : JSON::Builder)
+      json.scalar(value.to_i)
+    end
+  end
+
+  struct PointFromArray
+    def self.from_json(pull : JSON::PullParser)
+      pull.read_begin_array
+      x, y = pull.read_int, pull.read_int
+      pull.read_end_array
+      {x.to_f, y.to_f}
+    end
+
+    def self.to_json(value : Point, json : JSON::Builder)
+      json.start_array
+      json.scalar(value[0].to_i)
+      json.scalar(value[1].to_i)
+      json.end_array
+    end
+  end
 end
 
-# Uncomment lines 426-438 to generate a Dendro. The output will
+# Uncomment lines 453-465 to generate a Dendro. The output will
 # be an SVG-formatted string. Copy and paste it into a new file,
-# and call is for example "dendro.svg".
+# and call is for example 'dendro.svg'.
 #
 # Replace the values below with the values of your Dendro. They
 # can be found in the metadata of your NFT.
 #
-# number = 1            # integer value (1-3000)
-# color_id = 0          # integer value (0-5)
-# previous_cores = "[]" # JSON-formatted string (array of cores)
-# add_core = false      # boolean value (true/false)
-#
+# number = 1             # integer value (1-3000)
+# color_id = 0           # integer value (0-5)
+# previous_cores = %([]) # JSON string (array of cores)
+# add_core = false       # boolean value (true/false)
+
 # dendro = Dendro.new(
 #   seed: number,
 #   color: color_id,
 #   previous_cores: previous_cores,
 #   add_core: add_core
 # )
-#
+
 # puts dendro.to_svg
