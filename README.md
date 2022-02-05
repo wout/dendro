@@ -40,9 +40,9 @@ To generate a Dendro, you'll need four parameters.
 #### `add_core` _`(Bool)`_
 A boolean value, which can only be `true` or `false`.
 
-**Note**: setting `add_core` to `true` will not always add a core. It will only
+_**Note**: setting `add_core` to `true` will not always add a core. It will only
 be added if there's enough space left on the canvas. The algorithm will try 500
-times to find an open space.
+times to find an open space._
 
 #### `color` _`(Int32)`_
 This property is defined by a number from `1` to `5`:
@@ -103,10 +103,10 @@ Under `previous_cores` you'll see:
 ]
 ```
 
-**Note**: Unfortunately, none of the Cardano explorers displays the metadata as
+_**Note**: Unfortunately, none of the Cardano explorers displays the metadata as
 JSON. Meaning the keys are not wrapped in double quotes. Valid JSON would be
 `"age": 1` instead of `age: 1`. There's a small helper included in this repo to
-fix this, so you'll only have to copy and paste what's given to you. 🎉️
+fix this, so you'll only have to copy and paste what's given to you._ 🎉️
 
 Now, let's get started. Open the file called `playground.cr`. It has some
 example code you can use as a starting point:
