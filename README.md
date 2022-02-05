@@ -1,8 +1,10 @@
-# Sourcecode of DendroRithms
+# Source code of DendroRithms
+
+<div style="max-width: 400px; margin: 0 auto;">
+![color: verdigris - cores: 15](images/dr-verdigris.png)
+</div>
 
 **DendroRithms is a generative art installation inspired by tree growth rings.**
-
-![color: verdigris - cores: 15](images/dr-verdigris.png)
 
 Every Dendro is uniquely generated from user input using an interactive minting
 process. Buyers collectively decide the rarity and evolution of the artwork.
@@ -14,15 +16,14 @@ This project is written in [Crystal](https://crystal-lang.org/). To run the
 code, there are two options.
 
 ### 1. The Crystal Playground
-The easiest way to get started, is to use the online
+The easiest way to get started is to use the online
 [Crystal Playground](https://play.crystal-lang.org/#/cr). Paste the code found
 in `dendro.cr` into the playground, uncomment lines 453 to 465 and click on
 **Compile & run code**.
 
-When it's done, copy the output on the left, paste it in
-an empty file and save it as `dendro.svg`. You you can open this file in a
-browser, Illustrator, Affinity Designer, Inkscape or any other Vector Graphics
-software.
+When it's done, copy the output on the left, paste it into an empty file and
+save it as `dendro.svg`. You can open the resulting file in a browser,
+Illustrator, Affinity Designer, Inkscape or any other Vector Graphics software.
 
 ### 2. Installing Crystal
 Installing Crystal is a bit more complex, but you'll get the benefit of running 
@@ -36,16 +37,15 @@ Once you're up and running, you can start playing with the code.
 ### Parameters
 To generate a Dendro, you'll need four parameters.
 
-#### `add_core` (Bool)
-An indication if a core needs to be added or not. This is a boolean value, which
-can only be `true` or `false`.
+#### `add_core` _`(Bool)`_
+A boolean value, which can only be `true` or `false`.
 
-Note that setting `add_core` to `true` will not always add a core. It will only
+**Note**: setting `add_core` to `true` will not always add a core. It will only
 be added if there's enough space left on the canvas. The algorithm will try 500
 times to find an open space.
 
-#### `color` (Int32)
-The color is defined by a number from `1` to `5`. The available colours are:
+#### `color` _`(Int32)`_
+This property is defined by a number from `1` to `5`:
 - `0` `#BAF4DE` (verdigris)
 - `1` `#FFFFFA` (porcelain)
 - `2` `#CAEFF7` (frost)
@@ -53,9 +53,9 @@ The color is defined by a number from `1` to `5`. The available colours are:
 - `4` `#DEDAF1` (lilac)
 - `5` `#E5B7A5` (copper)
 
-#### `previous_cores` (String)
+#### `previous_cores` _`(String)`_
 Every Dendro starts with the cores from the previous one in the same colour
-chain. This is a JSON-formatted string. For example:
+chain. This property expects a JSON-formatted string. For example:
 
 ```json
 [
@@ -64,24 +64,24 @@ chain. This is a JSON-formatted string. For example:
 ]
 ```
 
-The structure of the JSON itself is and array with objects. Every object has the
-foloowing properties:
+The structure of the JSON itself is an array with objects. Every object has the
+following properties:
 
 - `age`: the current age of the core
-- `cp`: center point, an array of two integer representing [x, y]
+- `cp`: center point, an array of two integer values representing [x, y]
 - `life`: the maximum lifespan of the core
 - `max_r`: the maximum radius of the core at middle age (50% life)
 
-#### `seed` (Int32)
+#### `seed` _`(Int32)`_
 Dendros use a lot of randomness. We're using a deterministic random generator.
-By giving the random generator a `seed` value, which generally is a number, it 
-will generate the exact same random sequence on every run.
+Giving the random generator a `seed` value, generally a number, will generate
+the same random sequence on every run.
 
-For the seed value, we use the Dendro's number, which can be any number between
-`1` and `3000`.
+For the seed value, we use the Dendro's number. That's any number between `1`
+and `3000`.
 
 ### Generating a specific Dendro
-For this section we're going to assume you've installed Crystal locally.
+For this section, we're going to assume you've installed Crystal locally.
 
 To generate a specific Dendro, look at the metadata of the one you want to
 generate. For example, let's look at the metadata of [Dendro
@@ -103,10 +103,10 @@ Under `previous_cores` you'll see:
 ]
 ```
 
-**Note**: Unfortunately, none of the Cardano explorers display the metadata as
+**Note**: Unfortunately, none of the Cardano explorers displays the metadata as
 JSON. Meaning the keys are not wrapped in double quotes. Valid JSON would be
 `"age": 1` instead of `age: 1`. There's a small helper included in this repo to
-fix this, so you'll only have to copy and past that's given to you. 🎉️
+fix this, so you'll only have to copy and paste what's given to you. 🎉️
 
 Now, let's get started. Open the file called `playground.cr`. It has some
 example code you can use as a starting point:
@@ -142,8 +142,8 @@ dendro = Dendro.new(
 File.write(Util.svg_file_name(number), dendro.to_svg)
 ```
 
-Simply copy and paste the cores from the metadata on Cardano Explorer between
-`<<-JSON` and `JSON` and everything will work.
+Copy and paste the `previous_cores` from the metadata on Cardano Explorer
+between `<<-JSON` and `JSON` and everything will work.
 
 Now, to run the code:
 
@@ -151,7 +151,7 @@ Now, to run the code:
 crystal playground.cr
 ```
 
-Now a Dendro with the specified settings will be generated and save into the 
+A Dendro with the specified settings will be generated and saved into the
 playground folder.
 
 #### Building the following Dendro
@@ -184,16 +184,16 @@ File.write(Util.svg_file_name(number), dendro_02.to_svg)
 ## FAQs
 
 ### Why Crystal?
-Initlially, this generator was written in JavaScript. Generating a Dendro
+Initially, this generator was written in JavaScript. Generating a Dendro
 could take up to three minutes. Crystal is extremely fast and allowed us to
-bring that number down to less than 15 seconds.
+decrease that number to less than 15 seconds.
 
 But there's more to Crystal than just speed. More info about its benefits can be
 found on [their home page](https://crystal-lang.org/).
 
-### How do I uncommend code?
-Code comments are lines starting with a `#`. They are ignored by the compiler.
-You can uncomment a line of code by removing the `#` in front of it. 
+### How do I uncomment code?
+Code comments are lines starting with a `#`. The compiler ignores them. You can
+uncomment a line of code by removing the `#` in front of it.
 
 ## License
 This project is open-source under the GNU Affero General Public License Version
