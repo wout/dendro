@@ -1,8 +1,10 @@
 # Source code of DendroRithms
 
-<div style="max-width: 400px; margin: 0 auto;">
 ![color: verdigris - cores: 15](images/dr-verdigris.png)
-</div>
+
+<p align="center">
+  <img src="images/dr-verdigris.png" width="128" height="128"/>
+</p>
 
 **DendroRithms is a generative art installation inspired by tree growth rings.**
 
