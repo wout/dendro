@@ -11,6 +11,11 @@ process. Buyers collectively decide the rarity and evolution of the artwork.
 
 This repository contains the source code used to generate the Dendros.
 
+![Discord](https://img.shields.io/discord/919515918034407464?label=discord)
+![Twitter Follow](https://img.shields.io/twitter/follow/dendrorithms?style=social)
+
+Read more on [dendrorithms.com](https://dendrorithms.com).
+
 ## Getting started
 This project is written in [Crystal](https://crystal-lang.org/). To run the
 code, there are two options.
