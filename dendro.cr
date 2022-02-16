@@ -41,6 +41,18 @@ struct Dendro
     %(#DFEDAE), # 3: phosphor
     %(#DEDAF1), # 4: lilac
     %(#E5B7A5), # 5: copper
+    %(#ff6d6a), # 6: coral
+    %(#e8cc00), # 7: saffron
+    %(#82a3ff), # 8: cornflower
+    %(#ff8200), # 9: goldfish
+    %(#26323C), # 10: slate
+    %(#fc8eac), # 11: flamingo
+    %(#05c3dd), # 12: azure
+    %(#C71A2F), # 13: amaranth
+    %(#9063cd), # 14: royalpurple
+    %(#9DEE00), # 15: neongreen
+    %(#623412), # 16: chocolate
+    %(#fb48c4), # 17: neonpink
   }
 
   alias Point = Tuple(Float64, Float64)
