@@ -413,7 +413,7 @@ struct Dendro
             end
           end
           svg.element(%(g), %(clip-path): %(url(#clip))) do
-            svg.element(%(rect), width: v, height: v)
+            svg.element(%(rect), width: v, height: v, stroke: %(none))
             cores.each { |c| build_core(c, color, prng, svg) }
           end
         end
