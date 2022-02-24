@@ -1,7 +1,8 @@
 require "./dendro"
 require "./helpers/util"
 
-[10].each do |i|
+# (6..17).each do |i|
+[8].each do |i|
   # Set variables here
   add_core = true
   color_id = i
