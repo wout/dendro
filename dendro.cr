@@ -42,7 +42,7 @@ struct Dendro
     %(#DEDAF1), # 4: lilac
     %(#E5B7A5), # 5: copper
     %(#ff6d6a), # 6: coral
-    %(#26323C), # 7: slate
+    %(#42515D), # 7: slate
     %(#f9c33b), # 8: saffron
     %(#6667AB), # 9: veryperi
     %(#ff8200), # 10: goldfish
